@@ -148,9 +148,92 @@ def find_e(n, rounding=False):
     
     return e
 
+
+def fibonacci(n, terms=None):
+    '''
+    Returns nth sequence in Fibonacci sequence
+    Option to set first two terms as a list object
+
+    Parameters
+    ----------
+    n : int
+        Term to return in Fibonacci sequence.
+    terms : list, optional
+        First two terms of sequence. Will default to [0, 1]
+        with no input from user.
+
+    Returns
+    -------
+    Integer from Fibonacci sequence.
+
+    '''
+    if not isinstance(n, int):
+        raise TypeError('n must be an integer')
+    if n <= 0:
+        raise ValueError('n must be positive')
+    if terms is None:
+        fib = [0, 1]
+    elif not isinstance(terms, list):
+        raise TypeError('terms must be list type')
+    elif len(terms) != 2:
+        raise ValueError('terms must be list of len 2')
+    elif not all(isinstance(n, int) for n in terms):
+        raise ValueError('both items in terms must be int type')
+    else:
+        fib = terms
     
+    if n < 3:
+        return fib[n-1]
+    else:
+        for i in range(n-2): 
+            # weird behavior if user inputs 1 or 0... quick fix
+            
+            fib.append(fib[-2]+fib[-1])
+        return fib[-1]
+    
+    
+def prime_factors(x):
+    '''
+    Returns list of all prime factors of positive integer x
 
+    Parameters
+    ----------
+    x : int
+        Positive integer to factorize
 
+    Returns
+    -------
+    List
+
+    '''
+    if not isinstance(x, int):
+        raise TypeError('x must be integer')
+    if x < 1:
+        raise ValueError('x must be greater than 1')
+    
+    # special case for 1
+    if x == 1:
+        return [1]
+    
+    # otherwise assume 1 is there and start with 2+
+    factors = [1] # add first factor
+    dividend = x  # we will iterate through this, 
+                  # dividing it by most recently found factor
+    
+    while(dividend != 1): # could be better without breaks maybe? but it works
+        if len(factors) == 1:
+            divisor = 2 # we don't want to start on one
+        else:
+            divisor = factors[-1] # make test divisor 
+        for k in range(divisor, x+1): # need to iterate all the way to x
+            if dividend % k == 0: # first divisor that yeilds 0 remainder
+                factors.append(k) # add it to the list
+                dividend = dividend / k # and set a new dividend
+                break
+        # if dividend == 1: # once we only have 1 remaining, stop
+        #     break
+
+    return factors
 
 
 
